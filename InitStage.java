@@ -3,8 +3,8 @@ public class InitStage extends Stage {
     public InitStage(InterStageStorage<Widget> _nextQueue, int _M, int _N, String _ID){
         nextQueue = _nextQueue;
 
-        M = _M;
-        N = _N;
+        setProductionParamaters(_M, _N);
+        parallelStage = 1;
 
         ID = _ID;
     }

@@ -4,6 +4,8 @@ public class MidStage extends Stage {
         prevQueue = _prevQueue;
         nextQueue = _nextQueue;
 
+        parallelStage = 1;
+
         ID = _ID;
     }
 

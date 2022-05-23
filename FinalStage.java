@@ -3,6 +3,8 @@ public class FinalStage extends Stage{
     public FinalStage(InterStageStorage<Widget> _prevQueue, String _ID){
         prevQueue = _prevQueue;
 
+        parallelStage = 1;
+
         ID = _ID;
     }
 

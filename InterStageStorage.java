@@ -12,13 +12,15 @@ public class InterStageStorage<T extends Widget> {
         queue = new LinkedList<>();
     }
 
-    public void push(T widget){
-        
+    public boolean push(T widget){
+        if(queue.size() != QMax){
+            queue.add(widget);
+        }
+        return false;    
     }
 
     public Widget pop(){
-        Widget removedHead = queue.peek();
-        return removedHead;
+        return queue.remove();
         
     }
 

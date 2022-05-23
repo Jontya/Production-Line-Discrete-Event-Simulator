@@ -18,6 +18,8 @@ public class ProductionLine {
     private int N;
     private int QMax;
 
+    private Random r;
+
     private PriorityQueue<TimeEvent> timeStorage;
 
     public ProductionLine(int _M, int _N, int _QMax){
@@ -65,7 +67,7 @@ public class ProductionLine {
         FinalStage S6 = new FinalStage(Q56, "S6");
 
         while(currentTime <= maxTime){
-
+            
         }
     }
 

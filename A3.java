@@ -22,5 +22,4 @@ public class A3{
             throw new ArrayIndexOutOfBoundsException("Invalid Paramaters");
         }
     }
-
 }

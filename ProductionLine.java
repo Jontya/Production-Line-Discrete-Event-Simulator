@@ -44,25 +44,25 @@ public class ProductionLine {
 
         InterStageStorage<Widget> Q56 = new InterStageStorage<Widget>(QMax, "Q56");
 
-        InitStage S0a = new InitStage();
+        InitStage S0a = new InitStage(Q01, M, N, "S0a", 2);
 
-        InitStage S0b = new InitStage();
+        InitStage S0b = new InitStage(Q01, M, N, "S0b", 2);
 
-        MidStage S1 = new MidStage();
+        MidStage S1 = new MidStage(Q01, Q12, "S1");
 
-        MidStage S2 = new MidStage();
+        MidStage S2 = new MidStage(Q12, Q23, "S2");
 
-        MidStage S3a = new MidStage();
+        MidStage S3a = new MidStage(Q23, Q34, "S3a", 2);
 
-        MidStage S3b = new MidStage();
+        MidStage S3b = new MidStage(Q23, Q34, "S3b", 2);
 
-        MidStage S4 = new MidStage();
+        MidStage S4 = new MidStage(Q34, Q45, "S4");
 
-        MidStage S5a = new MidStage();
+        MidStage S5a = new MidStage(Q45, Q56, "S5a", 2);
 
-        MidStage S5b = new MidStage();
+        MidStage S5b = new MidStage(Q45, Q56, "S5b", 2);
 
-        FinalStage S6 = new FinalStage();
+        FinalStage S6 = new FinalStage(Q56, "S6");
 
         while(currentTime <= maxTime){
 

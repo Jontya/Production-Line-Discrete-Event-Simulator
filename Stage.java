@@ -14,12 +14,13 @@ public abstract class Stage {
 
     private int M;
     private int N;
-    protected Random randomNum;
 
     protected int parallelStage;
 
     protected InterStageStorage<Widget> nextQueue;
     protected InterStageStorage<Widget> prevQueue;
+
+    protected Widget widget;
 
     protected String ID;
 
@@ -28,7 +29,7 @@ public abstract class Stage {
         N = _N;
     }
 
-    protected double getProcessingTime(){
+    protected double getProcessingTime(Random randomNum){
         return (parallelStage * M) + (parallelStage * N) * (randomNum.nextDouble() - 0.5);
     }
 
@@ -36,5 +37,10 @@ public abstract class Stage {
         return ID;
     }
 
-    
+    public abstract TimeEvent waiting(double currentTime);
+
+    public abstract void blocked(double currentTime);
+
+    public abstract void starved(double currentTime);
+
 }

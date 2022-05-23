@@ -13,19 +13,14 @@ import java.io.*;
 
 public class A3{
 
-    private static double M;
-    private static double N;
-    private static int QMax;
-
     public static void main (String args[]){
         if(args.length == 3){
-            M = Double.parseDouble(args[0]);
-            N = Double.parseDouble(args[1]);
-            QMax = Integer.parseInt(args[2]);
+            ProductionLine productionLine = new ProductionLine(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]));
+            productionLine.beginProduction();
         }
         else{
             throw new ArrayIndexOutOfBoundsException("Invalid Paramaters");
         }
-        
     }
+
 }

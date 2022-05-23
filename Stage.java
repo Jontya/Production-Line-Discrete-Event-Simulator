@@ -23,7 +23,7 @@ public abstract class Stage {
 
     protected String ID;
 
-    protected void setProductionParamaters(int _M, int _N){
+    protected void setProductionParameters(int _M, int _N){
         M = _M;
         N = _N;
     }

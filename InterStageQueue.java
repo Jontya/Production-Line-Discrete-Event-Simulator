@@ -1,12 +1,12 @@
 import java.util.*;
 
-public class InterStageStorage<T extends Widget> {
+public class InterStageQueue<T extends Widget> {
 
     private int QMax;
     private String ID;
     private Queue<T> queue;
 
-    public InterStageStorage(int _QMax, String _ID){
+    public InterStageQueue(int _QMax, String _ID){
         QMax = _QMax;
         ID = _ID;
         queue = new LinkedList<>();

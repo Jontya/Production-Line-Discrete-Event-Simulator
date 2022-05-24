@@ -28,6 +28,10 @@ public class InterStageQueue<T extends Widget> {
         return queue.size();
     }
 
+    public String getID(){
+        return ID;
+    }
+
 
 
     

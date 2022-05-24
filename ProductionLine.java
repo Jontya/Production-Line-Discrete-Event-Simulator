@@ -49,7 +49,6 @@ public class ProductionLine {
         InterStageQueue<Widget> Q56 = new InterStageQueue<Widget>(QMax, "Q56");
 
         InitStage S0a = new InitStage(Q01, M, N, "S0a", r, 2);
-        System.out.println(S0a.getProcessingTime());
 
         InitStage S0b = new InitStage(Q01, M, N, "S0b", r, 2);
 
@@ -70,8 +69,10 @@ public class ProductionLine {
         FinalStage S6 = new FinalStage(Q56, "S6");
 
         while(currentTime <= maxTime){
-            
+            currentTime = 10000001;
         }
+
+        System.out.println(S0a.getProcessingTime());
     }
 
     public String createReport(){

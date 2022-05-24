@@ -36,17 +36,17 @@ public class ProductionLine {
 
     public void beginProduction(){
 
-        InterStageStorage<Widget> Q01 = new InterStageStorage<Widget>(QMax, "Q01");
+        InterStageQueue<Widget> Q01 = new InterStageQueue<Widget>(QMax, "Q01");
 
-        InterStageStorage<Widget> Q12 = new InterStageStorage<Widget>(QMax, "Q12");
+        InterStageQueue<Widget> Q12 = new InterStageQueue<Widget>(QMax, "Q12");
 
-        InterStageStorage<Widget> Q23 = new InterStageStorage<Widget>(QMax, "Q23");
+        InterStageQueue<Widget> Q23 = new InterStageQueue<Widget>(QMax, "Q23");
 
-        InterStageStorage<Widget> Q34 = new InterStageStorage<Widget>(QMax, "Q34");
+        InterStageQueue<Widget> Q34 = new InterStageQueue<Widget>(QMax, "Q34");
 
-        InterStageStorage<Widget> Q45 = new InterStageStorage<Widget>(QMax, "Q45");
+        InterStageQueue<Widget> Q45 = new InterStageQueue<Widget>(QMax, "Q45");
 
-        InterStageStorage<Widget> Q56 = new InterStageStorage<Widget>(QMax, "Q56");
+        InterStageQueue<Widget> Q56 = new InterStageQueue<Widget>(QMax, "Q56");
 
         InitStage S0a = new InitStage(Q01, M, N, "S0a", r, 2);
         System.out.println(S0a.getProcessingTime());

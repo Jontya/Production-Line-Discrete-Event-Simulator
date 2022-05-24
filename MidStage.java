@@ -6,6 +6,8 @@ public class MidStage extends Stage {
 
         parallelStage = 1;
 
+        currentStatus = stageStatus.IDLE;
+
         ID = _ID;
     }
 
@@ -24,6 +26,10 @@ public class MidStage extends Stage {
     }
 
     public void starved(double currentTime){
+        
+    }
+
+    public void occupied(double currentTime){
         
     }
     

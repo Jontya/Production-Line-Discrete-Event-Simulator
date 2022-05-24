@@ -9,7 +9,9 @@ public class InitStage extends Stage {
         setProductionParameters(_M, _N);
         parallelStage = 1;
 
-        currentStatus = stageStatus.WAITING;
+        prevTime = 0;
+
+        currentStatus = stageStatus.IDLE;
 
         ID = _ID;
     }
@@ -20,17 +22,48 @@ public class InitStage extends Stage {
         parallelStage = _parallelStage;
     }
 
+    @Override
     public TimeEvent waiting(double currentTime){
-        widget = new Widget();
+
+        prevTime = currentTime;
+
         double processTime = getProcessingTime();
+
+        widget = new Widget(currentTime, processTime + currentTime);
+
+        currentStatus = stageStatus.OCCUPIED;
+
         return new TimeEvent(processTime + currentTime);
     }
     
+    @Override
     public void blocked(double currentTime){
+        if(currentTime != prevTime){
+            timeBlocked += currentTime - prevTime;
+            prevTime = currentTime;
+        }
+
+        if(nextQueue.push(widget)){
+            currentStatus = stageStatus.IDLE;
+        }
 
     }
 
+    @Override
     public void starved(double currentTime){
+        return;
+    }
 
+    @Override
+    public void occupied(double currentTime){
+        prevTime = currentTime;
+        if(currentTime == widget.getEndTime()){
+            if(!nextQueue.push(widget)){
+                currentStatus = stageStatus.BLOCKED;
+            }
+            currentStatus = stageStatus.IDLE;
+        }
+        
+        
     }
 }

@@ -5,6 +5,8 @@ public class FinalStage extends Stage{
 
         parallelStage = 1;
 
+        currentStatus = stageStatus.IDLE;
+
         ID = _ID;
     }
 
@@ -23,6 +25,10 @@ public class FinalStage extends Stage{
     }
 
     public void starved(double currentTime){
+        
+    }
+
+    public void occupied(double currentTime){
         
     }
     

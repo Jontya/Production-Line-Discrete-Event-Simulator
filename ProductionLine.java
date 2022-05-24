@@ -27,6 +27,8 @@ public class ProductionLine {
         N = _N;
         QMax = _QMax;
 
+        r = new Random(100);
+
         currentTime = 0;
 
         timeStorage = new PriorityQueue<>();
@@ -46,9 +48,10 @@ public class ProductionLine {
 
         InterStageStorage<Widget> Q56 = new InterStageStorage<Widget>(QMax, "Q56");
 
-        InitStage S0a = new InitStage(Q01, M, N, "S0a", 2);
+        InitStage S0a = new InitStage(Q01, M, N, "S0a", r, 2);
+        System.out.println(S0a.getProcessingTime());
 
-        InitStage S0b = new InitStage(Q01, M, N, "S0b", 2);
+        InitStage S0b = new InitStage(Q01, M, N, "S0b", r, 2);
 
         MidStage S1 = new MidStage(Q01, Q12, "S1");
 

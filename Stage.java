@@ -19,8 +19,8 @@ public abstract class Stage {
 
     protected int parallelStage;
 
-    protected InterStageStorage<Widget> nextQueue;
-    protected InterStageStorage<Widget> prevQueue;
+    protected InterStageQueue<Widget> nextQueue;
+    protected InterStageQueue<Widget> prevQueue;
 
     protected stageStatus currentStatus;
 

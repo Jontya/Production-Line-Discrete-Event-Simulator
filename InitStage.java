@@ -2,7 +2,7 @@ import java.util.Random;
 
 public class InitStage extends Stage {
 
-    public InitStage(InterStageStorage<Widget> _nextQueue, int _M, int _N, String _ID, Random _randomNum){
+    public InitStage(InterStageQueue<Widget> _nextQueue, int _M, int _N, String _ID, Random _randomNum){
         nextQueue = _nextQueue;
         randomNum = _randomNum;
 
@@ -14,7 +14,7 @@ public class InitStage extends Stage {
         ID = _ID;
     }
 
-    public InitStage(InterStageStorage<Widget> _nextQueue, int _M, int _N, String _ID, Random _randomNum, int _parallelStage){
+    public InitStage(InterStageQueue<Widget> _nextQueue, int _M, int _N, String _ID, Random _randomNum, int _parallelStage){
         this(_nextQueue, _M, _N, _ID, _randomNum);
 
         parallelStage = _parallelStage;

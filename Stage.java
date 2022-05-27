@@ -1,87 +1,89 @@
 //---------------------------------------------------------------------------------------------------
 /** SENG2200 A3
 *** Jonty Atkinson (C3391110)
-*** 23/05/22
+*** 25/05/22
 ***
 *** Stage:
-*** 
+*** Stage is the abstract parent class for any stage in the production line. it defines the variables
+*** needed to function and provides the functionality for some global query methods while defining
+*** the abstract methods that require unique functionality.
 **/
 //---------------------------------------------------------------------------------------------------
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public abstract class Stage {
 
-    private int M;
-    private int N;
+    private static int M;
+    private static int N;
+    private static double maxTime;
+    protected static Random d;
 
-    protected Random randomNum;
-
-    protected int parallelStage;
+    protected Widget widget;
+    
+    protected String stageID;
 
     protected InterStageQueue<Widget> nextQueue;
     protected InterStageQueue<Widget> prevQueue;
 
-    protected stageStatus currentStatus;
+    protected boolean parallel;
+    protected ArrayList<Stage> nextStage;
 
-    protected Widget widget;
-    protected String ID;
+    protected int parallelCoefficient;
 
     protected double prevTime;
-    protected double timeBlocked;
     protected double timeStarved;
+    protected double timeBlocked;
 
-    protected enum stageStatus{
-        IDLE,
-        BLOCKED,
-        STARVED,
-        OCCUPIED
-    }
-
-    protected void setProductionParameters(int _M, int _N){
+    // Sets processing parameters
+    protected void setProcessingParams(int _M, int _N, double _maxTime){
         M = _M;
         N = _N;
+        maxTime = _maxTime;
     }
 
+    // Gets processing time
     protected double getProcessingTime(){
-        randomNum = new Random(100);
-        double r = randomNum.nextDouble();
-        System.out.println(r);
-
-        randomNum = new Random(100);
-        r = randomNum.nextDouble();
-        System.out.println(r);
-
-
-        return (parallelStage * M) + (parallelStage * N) * (r - 0.5);
+        return (parallelCoefficient * M) + (parallelCoefficient * N) * (d.nextDouble() - 0.5);
     }
 
-    public String getID(){
-        return ID;
+    // Gets the total time blocked
+    public double getTimeBlocked(){
+        return timeBlocked;
     }
 
-    public TimeEvent procesStage(double currentTime){
-        if(currentStatus == stageStatus.IDLE){
-            return waiting(currentTime);
-        }
-        if(currentStatus == stageStatus.BLOCKED){
-            blocked(currentTime);
-        }
-        if(currentStatus == stageStatus.STARVED){
-            starved(currentTime);
-        }
-        if(currentStatus == stageStatus.OCCUPIED){
-            occupied(currentTime);
-        }
-        return null;
+    // Gets the total time starved
+    public double getTimeStarved(){
+        return timeStarved;
     }
 
-    public abstract TimeEvent waiting(double currentTime);
+    //
+    public String stageReport(){
+        double stageWork = (100 - ((timeBlocked + timeStarved) / maxTime) * 100);
+        return stageID + ":     Work[%]: "  + String.format("%,.2f", stageWork) + "%     Starve[t]: " + String.format("%,.2f", timeStarved) + "     Block[t]: " + String.format("%,.2f", timeBlocked) + "\n";
+    }
 
-    public abstract void blocked(double currentTime);
+    // Creates a new time event
+    public TimeEvent getNewTimeEvent(){
+        return new TimeEvent(widget.getLastEndTime(), this);
+    }
 
-    public abstract void starved(double currentTime);
+    // Sets the next stage(s)
+    public void setNextStage(Stage stage, Stage parallelStage){
+        nextStage = new ArrayList<>();
+        nextStage.add(stage);
+        parallel = false;
+        if(parallelStage != null){
+            parallel = true;
+            nextStage.add(parallelStage);
+        }
+    }
 
-    public abstract void occupied(double currentTime);
+    // Abstract Methods
+    public abstract TimeEvent widgetIn(double currentTime);
 
+    public abstract void widgetOut();
+
+    public abstract ArrayList<TimeEvent> processStage(double currentTime);
 }

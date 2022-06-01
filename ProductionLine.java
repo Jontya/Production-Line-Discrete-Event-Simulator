@@ -13,33 +13,21 @@ import java.util.*;
 
 public class ProductionLine {
 
-    private static int M;
-    private static int N;
-    private static int QMax;
     private static double maxTime = 10000000;
-
-    private String report;
-
     private double currentTime;
-
     private PriorityQueue<TimeEvent> eventQueue;
+    private String report;
     
     // Constructor
-    public ProductionLine(int _M, int _N, int _QMax){
-        M = _M;
-        N = _N;
-        QMax = _QMax;
-
+    public ProductionLine(){
         currentTime = 0;
-
         report = "";
-
         eventQueue = new PriorityQueue<>();
     }
 
-    public void beginProduction(){
+    public void beginProduction(int M, int N, int QMax){
         // Initializes each inter-stage storage queue
-        InterStageQueue<Widget> Q01 = new InterStageQueue<>(QMax, "Q01", maxTime);
+        InterStageQueue<Widget> Q01 = new InterStageQueue<>(QMax, "Q01");
         InterStageQueue<Widget> Q12 = new InterStageQueue<>(QMax, "Q12");
         InterStageQueue<Widget> Q23 = new InterStageQueue<>(QMax, "Q23");
         InterStageQueue<Widget> Q34 = new InterStageQueue<>(QMax, "Q34");
@@ -60,41 +48,40 @@ public class ProductionLine {
 
         EndStage S6 = new EndStage(Q56, 1, "S6");
 
-        // Sets each stages "links"
-        S0a.setNextStage(S1, null);
-        S0b.setNextStage(S1, null);
-        S1.setNextStage(S2, null);
-        S2.setNextStage(S3a, S3b);
-        S3a.setNextStage(S4, null);
-        S3b.setNextStage(S4, null);
-        S4.setNextStage(S5a, S5b);
-        S5a.setNextStage(S6, null);
-        S5b.setNextStage(S6, null);
+        Q01.setNextStage(S1, null);
+        Q12.setNextStage(S2, null);
+        Q23.setNextStage(S3a, S3b);
+        Q34.setNextStage(S4, null);
+        Q45.setNextStage(S5a, S5b);
+        Q56.setNextStage(S6, null);
 
         // Creates two new widgets and adds their time event to the PQ
         eventQueue.add(S0a.widgetIn(currentTime));
         eventQueue.add(S0b.widgetIn(currentTime));
-
-        ArrayList<TimeEvent> newJobs;
+        
 
         // Loops while the max time limit has not been reached
         while(currentTime < maxTime){
-            // sets current time as the next event in the PQ
             currentTime = eventQueue.peek().getTime();
+            TimeEvent temp = eventQueue.remove().getStageRef().processStage(currentTime);
+            if(temp.getTime() == -1){
+                eventQueue.add(new TimeEvent(eventQueue.peek().getTime()+1, temp.getStageRef()));
+            }
+            else{
+                eventQueue.add(temp);
+            }
 
-            // Gets all of the new events created after processing the previous stage
-            newJobs = eventQueue.remove().getStageRef().processStage(currentTime);
-            // Adds all new events into the PQ
-            for(int i = 0; i < newJobs.size(); i++){
-                if(newJobs.get(i).getTime() == -1){
-                    eventQueue.add(new TimeEvent(eventQueue.peek().getTime() + 1, newJobs.get(i).getStageRef()));
-                }
-                else{
-                    eventQueue.add(newJobs.get(i));
+            if(temp.getStageRef().getNextQueue() != null){
+                ArrayList<Stage> nextStage = temp.getStageRef().getNextQueue().getNextStage();
+                for(int i = 0; i < nextStage.size(); i++){
+                    if(nextStage.get(i).isEmpty() && nextStage.get(i).getPrevQueue().getSize() > 0){
+                        eventQueue.add(nextStage.get(i).widgetIn(currentTime));
+                    }
                 }
             }
         }
 
+        
         // List of finished widgets
         ArrayList<Widget> finishedWidgets = S6.getFinishedWidgets();
 
@@ -169,11 +156,11 @@ public class ProductionLine {
         }
 
         report += "S0a: " + String.format("%,d", countA) + "\n";
-        report += "S0b: " + String.format("%,d", countB) + "\n";
+        report += "S0b: " + String.format("%,d", countB);
         
     }
 
-    public String getReport(){
+    public String productionReport(){
         return report;
     }
 }

@@ -18,19 +18,11 @@ public class EndStage extends Stage{
     
     // Constructor
     public EndStage(InterStageQueue<Widget> _prevQueue, int _parallelCoefficient, String _stageID){
+        super();
         prevQueue = _prevQueue;
         nextQueue = null;
-
-        widget = null;
-
         finishedWidgets = new ArrayList<>();
-
         stageID = _stageID;
-
-        prevTime = 0;
-        timeBlocked = 0;
-        timeStarved = 0;
-
         parallelCoefficient = _parallelCoefficient;
     }
 
@@ -42,6 +34,9 @@ public class EndStage extends Stage{
     // Pulls widget from the previous inter stage storage queue and stores it in the current stage
     @Override
     public TimeEvent widgetIn(double currentTime){
+        if(timeStarved == 0){
+            timeStarved += currentTime;
+        }
         widget = prevQueue.pop(currentTime);
         widget.addEvent(currentTime, getProcessingTime() + currentTime, stageID);
         return new TimeEvent(widget.getLastEndTime(), this); // creates new time event
@@ -56,17 +51,14 @@ public class EndStage extends Stage{
 
     // Processes the current stage
     @Override
-    public ArrayList<TimeEvent> processStage(double currentTime){
-        ArrayList<TimeEvent> newEvents = new ArrayList<>();
-        if(prevQueue.getSize() > 0){ // if end stage is not starved
-            widgetOut(); // pushes the widget out of the final stage
-            newEvents.add(widgetIn(currentTime)); // creates a new time event
+    public TimeEvent processStage(double currentTime){
+        if(prevQueue.getSize() > 0){ // If stage is not starved
+            widgetOut(); // Pushes widget to the finished widget list
+            prevTime = currentTime; // Updates prev time
+            return widgetIn(currentTime); // Pulls in a new widget and returns a new time event
         }
-        else{ // if end stage is starved
-            timeStarved += currentTime - prevTime; // updates total time starved
-            newEvents.add(new TimeEvent(-1, this)); // re-inserts into the PQ
-        }
-        prevTime = currentTime;
-        return newEvents;
+        timeStarved += currentTime - prevTime; // Else updates time starved
+        prevTime = currentTime; // Updates prev time
+        return new TimeEvent(-1, this); // Returns a time event that needs to be re inserted at peek().getTime()
     }
 }

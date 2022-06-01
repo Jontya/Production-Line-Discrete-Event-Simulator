@@ -10,7 +10,6 @@
 **/
 //---------------------------------------------------------------------------------------------------
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class StartStage extends Stage{
@@ -19,17 +18,11 @@ public class StartStage extends Stage{
 
     // Constructor
     public StartStage(InterStageQueue<Widget> _nextQueue, int _M, int _N, double _maxTime, int _parallelCoefficient, String _stageID){
+        super();
+
         prevQueue = null;
         nextQueue = _nextQueue;
-
-        widget = null;
-
         stageID = _stageID;
-
-        prevTime = 0;
-        timeBlocked = 0;
-        timeStarved = 0;
-
         parallelCoefficient = _parallelCoefficient;
 
         d = new Random();
@@ -42,6 +35,7 @@ public class StartStage extends Stage{
         String widgetID = IDGen.getID();
         Widget newWidget;
 
+        // Adds the final stage suffix
         if(stageID.charAt(stageID.length()-1) == 'a' || stageID.charAt(stageID.length()-1) == 'b'){
             newWidget = new Widget(widgetID + "-" + stageID.substring(stageID.length() - 1));
             newWidget.addEvent(startTime, endTime, stageID);
@@ -69,35 +63,15 @@ public class StartStage extends Stage{
 
     // Processes the current stage
     @Override
-    public ArrayList<TimeEvent> processStage(double currentTime){
-        ArrayList<TimeEvent> newEvents = new ArrayList<>();
-        if(!nextQueue.isFull()){ // if start stage is not blocked
-            widgetOut(); // pushes widget out of the stage
-            newEvents.add(widgetIn(currentTime)); // creates a new widget and time event
-
-            for(int i = 0; i < nextStage.size(); i++){ // loops through each stage (2 if running in parallel)
-                if(nextStage.get(i).widget == null && nextQueue.getSize() > 0){ // checks if next stage doesn't have a widget and the next queue isn't empty
-                    newEvents.add(nextStage.get(i).widgetIn(currentTime)); // next stage pulls in a new widget and a new time event is created
-                }
-            }
+    public TimeEvent processStage(double currentTime){
+        if(!nextQueue.isFull()){ // If stage is not blocked
+            widgetOut(); // Pushes widget to the next queue
+            prevTime = currentTime; // Updates prev time
+            return widgetIn(currentTime); // Creates a new widget and returns a new time event
         }
-        else{ // if start start stage is blocked
-            timeBlocked += currentTime - prevTime; // updates total time blocked
-            for(int i = 0; i < nextStage.size(); i++){ // Loops through each sage (2 if running in parallel)
-                if(nextStage.get(i).widget == null && nextQueue.getSize() > 0){
-                    newEvents.add(nextStage.get(i).widgetIn(currentTime)); // next stage pulls in a new widget and a new time event is created
-                }
-            }
-            if(!nextQueue.isFull()){ // if the next queue is no longer full
-                widgetOut(); // widget gets pushed onto the next queue 
-                newEvents.add(widgetIn(currentTime)); // new widget is made and a new time event is created
-            }
-            else{
-                newEvents.add(new TimeEvent(-1, this)); // will be re-inserted into the PQ with the time being peek().getTime()
-            }
-        }
-        prevTime = currentTime; // prev time is updated
-        return newEvents;
+        timeBlocked += currentTime - prevTime; // Else updates time blocked
+        prevTime = currentTime; // Updates prev time
+        return new TimeEvent(-1, this); // Returns a time event that needs to be re inserted at peek().getTime()
     }
     
 }

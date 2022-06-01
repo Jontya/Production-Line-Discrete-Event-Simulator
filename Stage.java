@@ -10,7 +10,6 @@
 **/
 //---------------------------------------------------------------------------------------------------
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public abstract class Stage {
@@ -21,20 +20,25 @@ public abstract class Stage {
     protected static Random d;
 
     protected Widget widget;
-    
     protected String stageID;
 
     protected InterStageQueue<Widget> nextQueue;
     protected InterStageQueue<Widget> prevQueue;
-
-    protected boolean parallel;
-    protected ArrayList<Stage> nextStage;
 
     protected int parallelCoefficient;
 
     protected double prevTime;
     protected double timeStarved;
     protected double timeBlocked;
+
+    // Super class constructor
+    public Stage(){
+        prevTime = 0;
+        timeStarved = 0;
+        timeBlocked = 0;
+
+        widget = null;
+    }
 
     // Sets processing parameters
     protected void setProcessingParams(int _M, int _N, double _maxTime){
@@ -48,36 +52,28 @@ public abstract class Stage {
         return (parallelCoefficient * M) + (parallelCoefficient * N) * (d.nextDouble() - 0.5);
     }
 
-    // Gets the total time blocked
-    public double getTimeBlocked(){
-        return timeBlocked;
+    // Checks if the stage has a widget
+    public boolean isEmpty(){
+        if(widget == null){
+            return true;
+        }
+        return false;
     }
 
-    // Gets the total time starved
-    public double getTimeStarved(){
-        return timeStarved;
-    }
-
-    //
+    // generate the stage report
     public String stageReport(){
-        double stageWork = (100 - ((timeBlocked + timeStarved) / maxTime) * 100);
+        double stageWork = (100-((timeBlocked + timeStarved) / maxTime)*100);
         return stageID + ":     Work[%]: "  + String.format("%,.2f", stageWork) + "%     Starve[t]: " + String.format("%,.2f", timeStarved) + "     Block[t]: " + String.format("%,.2f", timeBlocked) + "\n";
     }
 
-    // Creates a new time event
-    public TimeEvent getNewTimeEvent(){
-        return new TimeEvent(widget.getLastEndTime(), this);
+    // Gets the stages next queue
+    public InterStageQueue<Widget> getNextQueue(){
+        return nextQueue;
     }
 
-    // Sets the next stage(s)
-    public void setNextStage(Stage stage, Stage parallelStage){
-        nextStage = new ArrayList<>();
-        nextStage.add(stage);
-        parallel = false;
-        if(parallelStage != null){
-            parallel = true;
-            nextStage.add(parallelStage);
-        }
+    // Gets the stages prev queue
+    public InterStageQueue<Widget> getPrevQueue(){
+        return prevQueue;
     }
 
     // Abstract Methods
@@ -85,5 +81,5 @@ public abstract class Stage {
 
     public abstract void widgetOut();
 
-    public abstract ArrayList<TimeEvent> processStage(double currentTime);
+    public abstract TimeEvent processStage(double currentTime);
 }

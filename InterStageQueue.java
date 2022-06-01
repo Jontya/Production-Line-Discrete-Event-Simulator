@@ -10,52 +10,42 @@
 //---------------------------------------------------------------------------------------------------
 
 import java.util.Queue;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class InterStageQueue<T extends Widget>{
-
-    private static double maxTime;
 
     private int QMax; // Queue size limit
     private String queueID;
     private Queue<T> queue;
 
-    private double prevTime;
+    private ArrayList<Stage> nextStage;
 
-    private int widgetCount;
     private double timeCount;
-    private double widgetsInQueue;
+    private double widgetCount;
+    private int widgetSum;
+    private int timeSum;
 
     // Constructor
     public InterStageQueue(int _QMax, String _queueID){
         QMax = _QMax;
         queueID = _queueID;
 
-        prevTime = 0;
-
         widgetCount = 0;
         timeCount = 0;
-        widgetsInQueue = 0;
+        widgetSum = 0;
+        timeSum = 0;
 
         queue = new LinkedList<>();
-    }
-
-    // Second Constructor
-    public InterStageQueue(int _QMax, String _queueID, double _maxTime){
-        this(_QMax, _queueID);
-        maxTime = _maxTime;
+        nextStage = new ArrayList<>();
     }
 
     // Attempts to push a new item on the list (returns outcome based on the queue size limit)
     public boolean push(T widget){
         if(queue.size() != QMax){
-            double currentTime = widget.getLastEndTime();
-            double timeDifference = currentTime - prevTime;
-            prevTime = currentTime;
-
-            widgetsInQueue += timeDifference * getSize();
-
+            widgetSum += getSize();
             queue.add(widget);
+            widgetCount++;
             return true;
         }
         return false;    
@@ -64,13 +54,11 @@ public class InterStageQueue<T extends Widget>{
     // Removes from the list
     public T pop(double currentTime){
         if(getSize() != 0){
-            double timeDifference = currentTime - prevTime;
-            prevTime = currentTime;
-            widgetsInQueue += timeDifference * getSize();
-            widgetCount++;
-
+            widgetSum += getSize();
             T temp = queue.remove();
-            timeCount += currentTime - temp.getLastEndTime();
+            timeSum += currentTime - temp.getLastEndTime();
+            widgetCount++;
+            timeCount++;
             return temp;
         }
         return null;
@@ -88,10 +76,24 @@ public class InterStageQueue<T extends Widget>{
     public int getSize(){
         return queue.size();
     }
+
+    // Sets the next stage(s)
+    public void setNextStage(Stage stageA, Stage stageB){
+        nextStage.add(stageA);
+        if(stageB != null){
+            nextStage.add(stageB);
+        }
+    }
+
+    // Gets the next stage
+    public ArrayList<Stage> getNextStage(){
+        return nextStage;
+    }
     
+    // Returns a string with all of the queues information (Average widgets at any time and Average time spent in the queue)
     public String queueReport(){
-        double avgTime = timeCount / widgetCount;
-        double avgWidgets = widgetsInQueue / maxTime;
+        double avgTime = timeSum / timeCount;
+        double avgWidgets = widgetSum / widgetCount;
         return queueID + ":     AvgTime[t]: " + String.format("%,.2f", avgTime) + "     AvgWidgets: " + String.format("%,.2f", avgWidgets) + "\n";
     }
 }

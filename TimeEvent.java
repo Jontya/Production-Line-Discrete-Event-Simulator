@@ -1,15 +1,3 @@
-//---------------------------------------------------------------------------------------------------
-/** SENG2200 A3
-*** Jonty Atkinson (C3391110)
-*** 24/05/22
-***
-*** TimeEvent:
-*** Created in the stages and stored in a priority queue inside of the production line. stores a time
-*** and a reference to a stage that needs to be processed at said time. Crucial in the functionality
-*** for the discrete event simulator.
-**/
-//---------------------------------------------------------------------------------------------------
-
 public class TimeEvent implements Comparable<TimeEvent>{
 
     private double time;

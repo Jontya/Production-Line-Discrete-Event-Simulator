@@ -1,15 +1,3 @@
-//---------------------------------------------------------------------------------------------------
-/** SENG2200 A3
-*** Jonty Atkinson (C3391110)
-*** 23/05/22
-***
-*** Widget:
-*** basic widget class that is used to store a list of simulation events (used in the report) and a
-*** globally unique widget ID. Widgets are stored in the inter-stage storage queues and also used
-*** in each stage.
-**/
-//---------------------------------------------------------------------------------------------------
-
 import java.util.ArrayList;
 
 public class Widget {

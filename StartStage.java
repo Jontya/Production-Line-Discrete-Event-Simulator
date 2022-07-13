@@ -1,15 +1,3 @@
-//---------------------------------------------------------------------------------------------------
-/** SENG2200 A3
-*** Jonty Atkinson (C3391110)
-*** 25/05/22
-***
-*** StartStage:
-*** Extending from its parent class Stage, this class provides functionality for the start stage in
-*** the production Line. It is able to process widgets stored in the stage, create new widgets and
-*** push widgets into the next inter-stage storage queue.
-**/
-//---------------------------------------------------------------------------------------------------
-
 import java.util.Random;
 
 public class StartStage extends Stage{

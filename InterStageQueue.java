@@ -1,13 +1,4 @@
-//---------------------------------------------------------------------------------------------------
-/** SENG2200 A3
-*** Jonty Atkinson (C3391110)
-*** 24/05/22
-***
-*** InterStageQueue:
-*** This class wraps around a linkedList and acts as a queue, this is used for the inter-stage storage
-*** queue between each stage and provides the basic queries required to move items through each stage.
-**/
-//---------------------------------------------------------------------------------------------------
+
 
 import java.util.Queue;
 import java.util.ArrayList;

@@ -1,15 +1,3 @@
-//---------------------------------------------------------------------------------------------------
-/** SENG2200 A3
-*** Jonty Atkinson (C3391110)
-*** 25/05/22
-***
-*** Stage:
-*** Stage is the abstract parent class for any stage in the production line. it defines the variables
-*** needed to function and provides the functionality for some global query methods while defining
-*** the abstract methods that require unique functionality.
-**/
-//---------------------------------------------------------------------------------------------------
-
 import java.util.Random;
 
 public abstract class Stage {

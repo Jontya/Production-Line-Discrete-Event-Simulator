@@ -1,14 +1,4 @@
-//---------------------------------------------------------------------------------------------------
-/** SENG2200 A3
-*** Jonty Atkinson (C3391110)
-*** 25/05/22
-***
-*** EndStage:
-*** Extending from its parent class Stage, this class provides functionality for the final stage in
-*** the production Line. It is able to process widgets stored in the stage, pull in new widgets and
-*** move finished widgets into the finishedWidgets list.
-**/
-//---------------------------------------------------------------------------------------------------
+
 
 import java.util.ArrayList;
 

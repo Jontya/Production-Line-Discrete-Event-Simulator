@@ -1,14 +1,3 @@
-//---------------------------------------------------------------------------------------------------
-/** SENG2200 A3
-*** Jonty Atkinson (C3391110)
-*** 24/05/22
-***
-*** ProductionLine:
-*** This class creates each stage and inter-stage queue. This class manages the priority queue and
-*** is in charge of managing all of the new time events. It creates the report when finished processing.
-**/
-//---------------------------------------------------------------------------------------------------
-
 import java.util.*;
 
 public class ProductionLine {
